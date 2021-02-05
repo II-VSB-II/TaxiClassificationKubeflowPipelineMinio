@@ -15,14 +15,21 @@ platform = 'local'
 #proxy="http://test:8080"
 proxy = ""
 
-dataflow_tf_data_validation_op  = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/tfdv_component.yaml')
-dataflow_tf_transform_op        = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/tft_component.yaml')
-tf_train_op                     = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/dnntrainer_component.yaml')
-dataflow_tf_model_analyze_op    = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/tfma_component.yaml')
-dataflow_tf_predict_op          = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/predict_component.yaml')
+dataflow_tf_data_validation_op  = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/tfdv_component.yaml')
+dataflow_tf_transform_op        = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/tft_component.yaml')
+tf_train_op                     = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/dnntrainer_component.yaml')
+dataflow_tf_model_analyze_op    = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/tfma_component.yaml')
+dataflow_tf_predict_op          = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/predict_component.yaml')
 
-confusion_matrix_op             = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/confusion_matrix_component.yaml')
-roc_op                          = components.load_component_from_url('https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/roc_component.yaml')
+confusion_matrix_op             = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/confusion_matrix_component.yaml')
+roc_op                          = components.load_component_from_url(
+  'https://raw.githubusercontent.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio/main/yamls/roc_component.yaml')
 
 @dsl.pipeline(
   name='TFX Taxi Cab Classification Pipeline Example',
@@ -59,7 +66,8 @@ def taxi_cab_classification(
             checkout = dsl.ContainerOp(
             name="checkout",
             image="alpine/git:latest",
-            command=["git", "clone", "https://github.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio.git", str(output) + "/pipelines", "-c", "http.proxy={}".format(proxy)],
+            command=["git", "clone", "https://github.com/II-VSB-II/TaxiClassificationKubeflowPipelineMinio.git", str(output) + 
+                     "/pipelines", "-c", "http.proxy={}".format(proxy)],
         ).apply(onprem.mount_pvc(vop.outputs["name"], 'local-storage', output))
         else:
             checkout = dsl.ContainerOp(
